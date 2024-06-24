@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: api-password-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8082
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/SSO
