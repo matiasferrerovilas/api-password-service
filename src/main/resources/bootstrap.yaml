@@ -1,12 +1,33 @@
+server:
+  port: ${PORT:${SERVER_PORT:0}}
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      default-zone: http://eureka-service:8761/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 spring:
   application:
     name: api-password-service
-  cloud:
-    config:
-      enabled: true
-      uri: http://localhost:8082
+  datasource:
+    url: jdbc:mysql://localhost/seguridad_m1?serverTimezone=America/Argentina/Buenos_Aires
+    username: root
+    password: Hola123!
+  jpa:
+    database-platform:  org.hibernate.dialect.MySQL8Dialect
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: false
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/realms/SSO
+          jwk-set-uri: http://localhost:8080/realms/SSO/protocol/openid-connect/certs
