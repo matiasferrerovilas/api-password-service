@@ -1,0 +1,181 @@
+plugins {
+	id 'org.springframework.boot' version '3.2.4'
+	id "io.spring.dependency-management" version "1.1.4"
+	id "io.freefair.lombok" version "8.6"
+	id 'org.liquibase.gradle' version "2.2.2"
+	id 'java'
+	id 'groovy'
+	id 'jacoco'
+}
+
+group = 'api-password-service'
+version = '1.0.0'
+
+java {
+	sourceCompatibility = '21'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+
+repositories {
+	mavenCentral()
+	maven {
+		url "https://gitlab.com/api/v4/groups/13383653/-/packages/maven"
+		name "GitLab"
+		credentials(HttpHeaderCredentials) {
+			name = 'Deploy-Token'
+			value = 'u8jkzaGLBq9ZuegQzxws'
+		}
+		authentication {
+			//noinspection GroovyAssignabilityCheck
+			header(HttpHeaderAuthentication)
+		}
+	}
+}
+
+dependencies {
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+	//cache
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'com.github.ben-manes.caffeine:caffeine'
+
+
+	// logs
+	implementation 'org.apache.commons:commons-text:1.11.0'
+
+	// http clients
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'io.github.openfeign:feign-okhttp'
+	implementation 'io.github.openfeign.form:feign-form:3.8.0'
+	implementation 'io.github.openfeign:feign-hc5:13.3'
+	implementation 'io.github.openfeign.form:feign-form-spring:3.8.0'
+
+	//Mapper
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+	testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+	// Audit
+	implementation 'capital.max.commons:lib-commons-audit:2.1.0'
+	implementation 'org.hibernate:hibernate-envers:6.4.4.Final'
+
+	//DB
+	implementation 'mysql:mysql-connector-java:8.0.33'
+
+	liquibaseRuntime 'org.liquibase:liquibase-core'
+	liquibaseRuntime 'mysql:mysql-connector-java:8.0.33'
+	liquibaseRuntime 'info.picocli:picocli:4.7.6'
+	testImplementation 'org.liquibase:liquibase-core'
+
+	compileOnly 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+	testCompileOnly 'org.projectlombok:lombok:1.18.32'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+	testImplementation 'org.mock-server:mockserver-junit-jupiter:5.15.0'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.apache.groovy:groovy:4.0.22'
+	testImplementation 'org.apache.groovy:groovy-json:4.0.22'
+	testImplementation 'org.apache.groovy:groovy-xml:4.0.22'
+	testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
+	testImplementation 'org.spockframework:spock-spring:2.4-M4-groovy-4.0'
+
+	testImplementation('com.athaydes:spock-reports:2.5.1-groovy-4.0') {
+		transitive = false
+	}
+	testImplementation('org.testcontainers:mysql')
+
+}
+
+bootJar {
+	archiveFileName = 'app.jar'
+}
+
+springBoot {
+	buildInfo()
+}
+
+test {
+	useJUnitPlatform()
+	systemProperty "file.encoding", "utf-8"
+	finalizedBy jacocoTestReport, jacocoTestCoverageVerification
+}
+
+dependencyManagement {
+	imports {
+		// Feign related
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.0"
+		mavenBom "org.keycloak.bom:keycloak-adapter-bom:24.0.4"
+	}
+}
+
+jacocoTestReport {
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, excludes: [
+					"capital/max/openapi/acdi/configuration/**",
+					"capital/max/openapi/acdi/ApiAcdiGatewayApplication*"
+			])
+		}))
+	}
+}
+
+check {
+	dependsOn jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			excludes = [
+					'capital.max.openapi.acdi.configuration.*',
+					'capital.max.openapi.acdi.client.*',
+					'capital.max.openapi.acdi.controller.*',
+					'capital.max.openapi.acdi.enums.*',
+					'capital.max.openapi.acdi.dto.*',
+					'capital.max.openapi.acdi.MsBotAcdiApplication',
+					'capital.max.openapi.acdi.listener.*',
+					'capital.max.openapi.acdi.event.*'
+			]
+			element = 'CLASS'
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.00
+			}
+		}
+	}
+}
+
+tasks.register('printVersion') {
+	doLast {
+		print project.version
+	}
+}
+
+liquibase {
+	def dbName = System.properties['dbName'] ?: 'ms-bot-acdi'
+	activities {
+		main {
+			changeLogFile 'build.migrations/db/changelog.xml'
+			url "jdbc:mysql://localhost:3306/$dbName"
+			username 'root'
+			password 'Hola123!'
+		}
+	}
+}
