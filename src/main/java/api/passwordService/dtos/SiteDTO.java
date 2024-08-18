@@ -6,11 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PasswordDTO {
-  @Schema(example = "123456")
-  private String password;
+public class SiteDTO {
   @Schema(example = "Facebook")
-  private String site;
-  @Schema(example = "1")
-  private Long userId;
+  private String description;
 }
