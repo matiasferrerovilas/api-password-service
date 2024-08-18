@@ -8,12 +8,13 @@ import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PasswordMapper {
 
 
   @Mapping(source = "site.description", target = "site")
   PasswordDTO toDto(Password password);
+
   @Mapping(source = "site", target = "site.description")
   Password toEntity(PasswordDTO passwordDTO);
 

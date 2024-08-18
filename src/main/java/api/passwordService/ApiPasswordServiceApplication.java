@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ApiPasswordServiceApplication {
 
-	public static void main(String[] args) {SpringApplication.run(ApiPasswordServiceApplication.class, args);
+	public static void main(String[] args) {
+		SpringApplication.run(ApiPasswordServiceApplication.class, args);
 	}
 
 }

@@ -6,6 +6,7 @@ plugins {
 	id 'java'
 	id 'groovy'
 	id 'jacoco'
+	id 'checkstyle'
 }
 
 group = 'passwordService'
@@ -13,6 +14,11 @@ version = '1.0.0'
 
 java {
 	sourceCompatibility = '21'
+}
+
+checkstyle {
+	configFile = file("$rootDir/checkstyle/checkstyle.xml")
+	toolVersion = '10.12.2'
 }
 
 configurations {

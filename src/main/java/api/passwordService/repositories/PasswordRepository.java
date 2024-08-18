@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PasswordRepository extends JpaRepository<Password,Long> {
+public interface PasswordRepository extends JpaRepository<Password, Long> {
   List<Password> findByUserId(Long userId);
 }
