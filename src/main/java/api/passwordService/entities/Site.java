@@ -1,4 +1,4 @@
-package api_password_service.password_service.entities;
+package api.passwordService.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

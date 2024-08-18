@@ -8,7 +8,7 @@ plugins {
 	id 'jacoco'
 }
 
-group = 'api-password-service'
+group = 'passwordService'
 version = '1.0.0'
 
 java {
@@ -65,12 +65,10 @@ dependencies {
 
 	//Mapper
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
 	// Audit
-	implementation 'capital.max.commons:lib-commons-audit:2.1.0'
 	implementation 'org.hibernate:hibernate-envers:6.4.4.Final'
 
 	//DB
@@ -114,6 +112,7 @@ test {
 	useJUnitPlatform()
 	systemProperty "file.encoding", "utf-8"
 	finalizedBy jacocoTestReport, jacocoTestCoverageVerification
+	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 }
 
 dependencyManagement {
@@ -128,8 +127,12 @@ jacocoTestReport {
 	afterEvaluate {
 		classDirectories.setFrom(files(classDirectories.files.collect {
 			fileTree(dir: it, excludes: [
-					"capital/max/openapi/acdi/configuration/**",
-					"capital/max/openapi/acdi/ApiAcdiGatewayApplication*"
+					"api/passwordService/configuration/**",
+					"api/passwordService/entities/**",
+					"api/passwordService/dtos/**",
+					"api/passwordService/exceptions/**",
+					"api/passwordService/mappers/**",
+					"api/passwordService/ApiPasswordServiceApplication*"
 			])
 		}))
 	}
@@ -143,14 +146,14 @@ jacocoTestCoverageVerification {
 	violationRules {
 		rule {
 			excludes = [
-					'capital.max.openapi.acdi.configuration.*',
-					'capital.max.openapi.acdi.client.*',
-					'capital.max.openapi.acdi.controller.*',
-					'capital.max.openapi.acdi.enums.*',
-					'capital.max.openapi.acdi.dto.*',
-					'capital.max.openapi.acdi.MsBotAcdiApplication',
-					'capital.max.openapi.acdi.listener.*',
-					'capital.max.openapi.acdi.event.*'
+					'api.passwordService.configuration.*',
+					'api.passwordService.client.*',
+					'api.passwordService.controller.*',
+					'api.passwordService.enums.*',
+					'api.passwordService.dto.*',
+					'api.passwordService.ApiPasswordServiceApplication',
+					'api.passwordService.listener.*',
+					'api.passwordService.event.*'
 			]
 			element = 'CLASS'
 			limit {

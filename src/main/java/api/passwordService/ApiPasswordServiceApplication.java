@@ -1,4 +1,4 @@
-package api_password_service.password_service;
+package api.passwordService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
