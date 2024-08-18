@@ -19,22 +19,15 @@ public class SiteService {
   }
 
   public Site saveSite(String description) {
-    validateExistenceSite(description);
-
-    return siteRepository.save(Site.builder()
-        .description(description)
-        .build());
+      return siteRepository.getByDescription(description)
+        .orElseGet(() ->siteRepository.save(Site.builder()
+            .description(description)
+            .build())
+        );
   }
 
   public void delete(String description) {
     Optional<Site> optional = siteRepository.findByDescription(description);
     siteRepository.delete(optional.get());
-  }
-
-  private void validateExistenceSite(String description) {
-    siteRepository.getByDescription(description)
-        .ifPresent(p -> {
-          throw new BusinessException("Sitio existente en la base de datos.");
-        });
   }
 }
