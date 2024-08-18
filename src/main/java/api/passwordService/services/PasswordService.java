@@ -23,6 +23,5 @@ public class PasswordService {
   public List<PasswordDTO> getAllPasswords() {
     var list = passwordRepository.findByUserId(1L);
     return passwordMapper.toDto(list);
-
   }
 }

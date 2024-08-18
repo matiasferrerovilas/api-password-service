@@ -178,13 +178,13 @@ tasks.register('printVersion') {
 }
 
 liquibase {
-	def dbName = System.properties['dbName'] ?: 'ms-bot-acdi'
+	def dbName = System.properties['dbName'] ?: 'seguridad_m1'
 	activities {
 		main {
 			changeLogFile 'build.migrations/db/changelog.xml'
 			url "jdbc:mysql://localhost:3306/$dbName"
 			username 'root'
-			password 'Hola123!'
+			password 'P4ssw0rd!'
 		}
 	}
 }
