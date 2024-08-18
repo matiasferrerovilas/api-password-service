@@ -6,8 +6,6 @@ import api.passwordService.repositories.SiteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @Slf4j
 public class SiteService {
@@ -19,15 +17,18 @@ public class SiteService {
   }
 
   public Site saveSite(String description) {
-      return siteRepository.getByDescription(description)
-        .orElseGet(() ->siteRepository.save(Site.builder()
+    return siteRepository.findByDescription(description)
+        .orElseGet(() -> siteRepository.save(Site.builder()
             .description(description)
             .build())
         );
   }
 
-  public void delete(String description) {
-    Optional<Site> optional = siteRepository.findByDescription(description);
-    siteRepository.delete(optional.get());
+  public void deleteSite(String description) {
+    siteRepository.findByDescription(description)
+        .ifPresentOrElse(siteRepository::delete
+            , () -> {
+              throw new BusinessException("Sitio no existente.");
+            });
   }
 }

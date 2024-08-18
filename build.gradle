@@ -118,7 +118,7 @@ test {
 	useJUnitPlatform()
 	systemProperty "file.encoding", "utf-8"
 	finalizedBy jacocoTestReport, jacocoTestCoverageVerification
-	maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+	maxParallelForks = Runtime.runtime.availableProcessors()
 }
 
 dependencyManagement {

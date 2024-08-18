@@ -17,10 +17,5 @@ CREATE TABLE site (
 ALTER TABLE password
     ADD CONSTRAINT fk_site_id
         FOREIGN KEY (site_id)
-            REFERENCES site(id);
-
-ALTER TABLE password
-    ADD CONSTRAINT fk_site_id
-        FOREIGN KEY (site_id)
             REFERENCES site(id)
             ON DELETE CASCADE;

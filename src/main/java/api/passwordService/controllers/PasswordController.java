@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/password")
+@RequestMapping("/v1/password")
 @Tag(name = "Password", description = "Manejo de passwords.")
 @Slf4j
 public class PasswordController {

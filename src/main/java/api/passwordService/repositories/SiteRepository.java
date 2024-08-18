@@ -9,7 +9,5 @@ import java.util.Optional;
 @Repository
 public interface SiteRepository extends JpaRepository<Site, Long> {
 
-  Optional<Site> getByDescription(String description);
-
   Optional<Site> findByDescription(String description);
 }

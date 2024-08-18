@@ -1,13 +1,15 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   liquibase:
     enabled: false
   datasource:
-    url: =jdbc:tc:mysql:8.0.30:///seguridad_m1
+    url: jdbc:tc:mysql:8.0.30:///seguridad_m1
     username: root
     password: Passw0rd!
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   jpa:
-    database-platform:  org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: false
     hibernate:
       ddl-auto: none
@@ -16,10 +18,15 @@ spring:
       hibernate:
         format_sql: true
         generate_statistics: false
-        dialect: hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/realms/SSO
-
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    try-it-out-enabled: true
+server:
+  forward-headers-strategy: framework

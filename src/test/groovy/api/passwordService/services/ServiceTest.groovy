@@ -25,7 +25,7 @@ class ServiceTest extends Specification {
 
         then: "No guarda el site dado que ya estaba"
 
-        1 * siteRepository.getByDescription(dto.getDescription()) >> Optional.of(site)
+        1 * siteRepository.findByDescription(dto.getDescription()) >> Optional.of(site)
         0 * siteService.saveSite(_)
     }
 
@@ -34,13 +34,41 @@ class ServiceTest extends Specification {
 
         def dto = createSiteDTO()
 
-        when: "Solicita guardar su password"
+        when: "Solicita guardar su sitio"
         siteService.saveSite(dto.getDescription())
 
-        then: "No guarda el site dado que ya estaba"
+        then: "No guarda el sitio dado que ya estaba"
 
-        1 * siteRepository.getByDescription(dto.getDescription()) >> Optional.empty()
+        1 * siteRepository.findByDescription(dto.getDescription()) >> Optional.empty()
         1 * siteRepository.save({r -> r.description == dto.getDescription()})
+    }
+
+    def "Intento Borrar un Site que no existe"() {
+        given: "Una password"
+
+        def dto = createSiteDTO()
+
+        when: "Solicita borrar un sitio"
+        siteService.deleteSite(dto.getDescription())
+
+        then: "No lo borro porque no existe"
+
+        1 * siteRepository.findByDescription(dto.getDescription()) >> Optional.empty()
+        thrown(BusinessException)
+    }
+
+    def "Intento Borrar un Site que existe"() {
+        given: "Una password"
+
+        def dto = createSiteDTO()
+        def site = createSite()
+        when: "Solicita borrar un sitio"
+        siteService.deleteSite(dto.getDescription())
+
+        then: "Borro el sitio porque si existe"
+
+        1 * siteRepository.findByDescription(dto.getDescription()) >> Optional.of(site)
+        1 * siteRepository.delete(site)
     }
 
     SiteDTO createSiteDTO(){

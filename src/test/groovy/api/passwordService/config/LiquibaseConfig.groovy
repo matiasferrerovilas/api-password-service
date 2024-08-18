@@ -15,11 +15,11 @@ import java.sql.Connection
 class LiquibaseConfig {
 
     @Autowired
-    DataSource apiDataSource
+    DataSource dataSource
 
     @PostConstruct
     def initializeDatabase() {
-        Connection connection = apiDataSource.getConnection();
+        Connection connection = dataSource.getConnection();
         Liquibase liquibase = new Liquibase(
                 "build.migrations/db/changelog.xml",
                 new FileSystemResourceAccessor(new File(".")),
