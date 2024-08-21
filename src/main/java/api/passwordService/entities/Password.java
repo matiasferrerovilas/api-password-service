@@ -32,9 +32,8 @@ public class Password {
   @NotNull
   private String password;
 
-  @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
+  @ManyToOne(optional = false)
   @JoinColumn(name = "site_id", nullable = false)
-  @OnDelete(action = OnDeleteAction.CASCADE)
   private Site site;
   private Long userId;
 

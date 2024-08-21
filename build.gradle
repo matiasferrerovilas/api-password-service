@@ -21,6 +21,13 @@ checkstyle {
 	toolVersion = '10.12.2'
 }
 
+copy {
+	from 'hooks/pre-commit','hooks/pre-push'
+	into '.git/hooks'
+	fileMode 0777
+}
+
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
