@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PasswordDTO {
+public class PasswordAddDTO {
   @Schema(example = "123456")
   private String password;
   @Schema(example = "Facebook")

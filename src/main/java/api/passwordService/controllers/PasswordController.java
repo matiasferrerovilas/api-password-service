@@ -1,6 +1,6 @@
 package api.passwordService.controllers;
 
-import api.passwordService.dtos.PasswordDTO;
+import api.passwordService.dtos.PasswordAddDTO;
 import api.passwordService.services.PasswordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,14 +31,14 @@ public class PasswordController {
   @Operation(description = "Retornar Todas las Passwords")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(value = HttpStatus.OK)
-  public List<PasswordDTO> getPasswords()  {
+  public List<PasswordAddDTO> getPasswords()  {
       return passwordService.getAllPasswords();
   }
 
   @Operation(description = "Guardar password")
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(value = HttpStatus.OK)
-  public void savePassword(@RequestBody  PasswordDTO passwordDTO)  {
-    passwordService.savePassword(passwordDTO);
+  public void savePassword(@RequestBody PasswordAddDTO passwordAddDTO)  {
+    passwordService.savePassword(passwordAddDTO);
   }
 }

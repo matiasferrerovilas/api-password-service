@@ -1,6 +1,6 @@
 package api.passwordService.services;
 
-import api.passwordService.dtos.PasswordDTO;
+import api.passwordService.dtos.PasswordAddDTO;
 import api.passwordService.entities.Password;
 import api.passwordService.exceptions.BusinessException;
 import api.passwordService.mappers.PasswordMapper;
@@ -24,28 +24,28 @@ public class PasswordService {
     this.siteService = siteService;
   }
 
-  public List<PasswordDTO> getAllPasswords() {
+  public List<PasswordAddDTO> getAllPasswords() {
     var list = passwordRepository.findByUserId(1L);
     return passwordMapper.toDto(list);
   }
 
-  public void savePassword(PasswordDTO passwordDTO) {
-    log.info("Intentando guardar password {} del sitio {} y usuario {}", passwordDTO.getPassword(), passwordDTO.getSite(), passwordDTO.getUserId());
+  public void savePassword(PasswordAddDTO passwordAddDTO) {
+    log.info("Intentando guardar password {} del sitio {} y usuario {}", passwordAddDTO.getPassword(), passwordAddDTO.getSite(), passwordAddDTO.getUserId());
 
-    validateExistencePassword(passwordDTO);
+    validateExistencePassword(passwordAddDTO);
 
-    var site = siteService.saveSite(passwordDTO.getSite());
+    var site = siteService.saveSite(passwordAddDTO.getSite());
 
     passwordRepository.save(
         Password.builder()
-        .password(passwordDTO.getPassword())
-        .userId(passwordDTO.getUserId())
+        .password(passwordAddDTO.getPassword())
+        .userId(passwordAddDTO.getUserId())
         .site(site)
         .build());
   }
 
-  private void validateExistencePassword(PasswordDTO passwordDTO) {
-    passwordRepository.getByPasswordAndSiteAndUserId(passwordDTO.getPassword(), passwordDTO.getSite(), passwordDTO.getUserId())
+  private void validateExistencePassword(PasswordAddDTO passwordAddDTO) {
+    passwordRepository.getByPasswordAndSiteAndUserId(passwordAddDTO.getPassword(), passwordAddDTO.getSite(), passwordAddDTO.getUserId())
         .ifPresent(p -> {
           throw new BusinessException("Password existente en la base de datos.");
         });

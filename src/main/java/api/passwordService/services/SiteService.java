@@ -26,9 +26,8 @@ public class SiteService {
 
   public void deleteSite(String description) {
     siteRepository.findByDescription(description)
-        .ifPresentOrElse(siteRepository::delete
-            , () -> {
-              throw new BusinessException("Sitio no existente.");
-            });
+        .ifPresentOrElse(siteRepository::delete, () -> {
+          throw new BusinessException("Sitio no existente.");
+        });
   }
 }

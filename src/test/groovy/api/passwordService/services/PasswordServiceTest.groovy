@@ -1,6 +1,7 @@
 package api.passwordService.services
 
-import api.passwordService.dtos.PasswordDTO
+
+import api.passwordService.dtos.PasswordAddDTO
 import api.passwordService.entities.Password
 import api.passwordService.entities.Site
 import api.passwordService.exceptions.BusinessException
@@ -97,8 +98,8 @@ class PasswordServiceTest extends Specification {
                .build()
     }
 
-    PasswordDTO createPasswordDTO(){
-        return PasswordDTO.builder()
+    PasswordAddDTO createPasswordDTO(){
+        return PasswordAddDTO.builder()
                 .password("random1")
                 .site("Git")
                 .userId(1L)

@@ -6,7 +6,7 @@ import api.passwordService.exceptions.BusinessException
 import api.passwordService.repositories.SiteRepository
 import spock.lang.Specification
 
-class ServiceTest extends Specification {
+class SiteServiceTest extends Specification {
 
     SiteRepository siteRepository = Mock()
     SiteService siteService
