@@ -41,7 +41,7 @@ jobs:
           cache: gradle
 
       - name: Run unit tests
-        run: ./gradlew build --scan --no-daemon
+        run: ./gradlew test --scan --no-daemon
 
       - name: Skip acceptance tests (if enabled)
         if: ${{ env.SKIP_ACCEPTANCE_TEST == 'true' }}
