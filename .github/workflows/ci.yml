@@ -21,8 +21,8 @@ jobs:
           java-version: '21'
           cache: 'gradle'
           cache-dependency-path: |
-            api-password-service/*.gradle*
-            api-password-service/**/gradle-wrapper.properties
+            **/gradle-wrapper.properties
+            **/*.gradle
       - run: ./gradlew build --no-daemon
 
   test:
