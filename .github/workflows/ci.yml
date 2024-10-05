@@ -39,8 +39,8 @@ jobs:
           java-version: '21'
           cache: 'gradle'
           cache-dependency-path: |
-            sub-project/*.gradle*
-            sub-project/**/gradle-wrapper.properties
+            **/gradle-wrapper.properties
+            **/*.gradle
 
       - name: Run unit tests
         run: ./gradlew test --no-daemon
