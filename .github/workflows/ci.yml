@@ -24,7 +24,7 @@ jobs:
           cache: gradle
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew build --scan --no-daemon
 
   test:
     runs-on: ubuntu-latest
@@ -41,7 +41,7 @@ jobs:
           cache: gradle
 
       - name: Run unit tests
-        run: ./gradlew test
+        run: ./gradlew build --scan --no-daemon
 
       - name: Skip acceptance tests (if enabled)
         if: ${{ env.SKIP_ACCEPTANCE_TEST == 'true' }}
