@@ -24,12 +24,11 @@ checkstyle {
 copy {
 	from 'hooks/pre-commit','hooks/pre-push'
 	into '.git/hooks'
-	fileMode 0777
 }
 
 
 configurations {
-	compileOnly {
+	implementation {
 		extendsFrom annotationProcessor
 	}
 }
@@ -99,9 +98,9 @@ dependencies {
 	testImplementation 'org.liquibase:liquibase-core'
 
 	//Lombok
-	compileOnly 'org.projectlombok:lombok:1.18.34'
+	implementation 'org.projectlombok:lombok:1.18.34'
 	annotationProcessor 'org.projectlombok:lombok:1.18.34'
-	testCompileOnly 'org.projectlombok:lombok:1.18.34'
+	testImplementation 'org.projectlombok:lombok:1.18.34'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 
 	//Testing
