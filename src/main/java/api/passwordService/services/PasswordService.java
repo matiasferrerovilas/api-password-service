@@ -6,6 +6,7 @@ import api.passwordService.mappers.PasswordMapper;
 import api.passwordService.repositories.PasswordRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class PasswordService {
   private final PasswordMapper passwordMapper;
   private final SiteService siteService;
   private final UserService userService;
+  private final PasswordEncoder passwordEncoder;
 
   public List<PasswordAddDTO> getAllPasswords() {
     var list = passwordRepository.findByUser(userService.getLoggedInUserEmail());
@@ -37,8 +39,9 @@ public class PasswordService {
     var password = passwordMapper.toEntity(passwordAddDTO);
     password.setSite(site);
     password.setUser(usuario);
-
+    password.setPassword(passwordEncoder.encode(password.getPassword()));
     passwordRepository.save(password);
+    log.info("Password guardada para el usuario {}", usuario);
   }
 
   private void validateExistencePassword(PasswordAddDTO passwordAddDTO) {

@@ -6,15 +6,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Data
 @Builder
@@ -33,10 +30,4 @@ public class Password {
   @JoinColumn(name = "site_id", nullable = false)
   private Site site;
   private String user;
-
-  @PrePersist
-  @PreUpdate
-  public void hashPassword() {
-    this.password = new BCryptPasswordEncoder().encode(this.password);
-  }
 }
