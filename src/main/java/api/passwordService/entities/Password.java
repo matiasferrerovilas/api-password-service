@@ -32,7 +32,7 @@ public class Password {
   @ManyToOne(optional = false)
   @JoinColumn(name = "site_id", nullable = false)
   private Site site;
-  private Long userId;
+  private String user;
 
   @PrePersist
   @PreUpdate

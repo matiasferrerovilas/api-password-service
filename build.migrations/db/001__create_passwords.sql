@@ -4,7 +4,7 @@
 CREATE TABLE password (
                          id bigint PRIMARY KEY AUTO_INCREMENT,
                          password varchar(255) NOT NULL,
-                         user_Id bigint NOT NULL,
+                         user varchar(60) NOT NULL,
                          site_id bigint NOT NULL
 );
 

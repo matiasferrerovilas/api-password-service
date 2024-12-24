@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface PasswordRepository extends JpaRepository<Password, Long> {
-  List<Password> findByUserId(Long userId);
+  List<Password> findByUser(String user);
 
 
-  @Query("SELECT p FROM Password p WHERE p.password = :password AND p.site.description = :description AND p.userId = :userId")
-  Optional<Password> getByPasswordAndSiteAndUserId(@Param("password") String password,
+  @Query("SELECT p FROM Password p WHERE p.password = :password AND p.site.description = :description AND p.user = :user")
+  Optional<Password> getByPasswordAndSiteAndUser(@Param("password") String password,
                                                       @Param("description") String description,
-                                                      @Param("userId") Long userId);
+                                                      @Param("user") String user);
 }

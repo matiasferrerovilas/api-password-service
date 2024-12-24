@@ -1,10 +1,13 @@
 server:
   port: ${PORT:${SERVER_PORT:0}}
+  forward-headers-strategy: framework
+
 jwt:
   auth:
     converter:
       principle-attribute: preferred_username
-      resource-id: mferrero
+      resource-id: admin-m2
+
 spring:
   application:
     name: api-password-service
@@ -28,6 +31,10 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://192.168.1.100:8080/realms/m2
+
+  liquibase:
+    enabled: false
+
 springdoc:
   api-docs:
     enabled: true
@@ -38,7 +45,7 @@ springdoc:
     try-it-out-enabled: true
     operations-sorter: alpha
     tags-sorter: alpha
-  show-actuator: true
+  show-actuator: false
 management:
   endpoints:
     web:
