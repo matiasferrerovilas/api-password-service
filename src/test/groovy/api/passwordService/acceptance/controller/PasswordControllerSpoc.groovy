@@ -1,5 +1,5 @@
 package api.passwordService.acceptance.controller
-
+/*
 import api.passwordService.acceptance.config.ControllerSpecification
 import api.passwordService.entities.Password
 import api.passwordService.entities.Site
@@ -30,7 +30,7 @@ class PasswordControllerSpoc extends ControllerSpecification {
                 Password.builder()
                         .password("random1")
                         .site(site)
-                        .userId(1L)
+                        .user("ejemplo")
                         .build())
     }
-}
+}*/

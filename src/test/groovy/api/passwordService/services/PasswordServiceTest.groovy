@@ -6,33 +6,38 @@ import api.passwordService.entities.Password
 import api.passwordService.entities.Site
 import api.passwordService.exceptions.BusinessException
 import api.passwordService.mappers.PasswordMapper
+import api.passwordService.mappers.PasswordMapperImpl
 import api.passwordService.repositories.PasswordRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.password.PasswordEncoder
 import spock.lang.Specification
 
 class PasswordServiceTest extends Specification {
 
     PasswordRepository passwordRepository = Mock()
     PasswordService passwordService
-    PasswordMapper passwordMapper = Mock()
+    PasswordMapper passwordMapper = new PasswordMapperImpl()
     SiteService siteService = Mock()
-    def setup(){
-        passwordService = new PasswordService(passwordRepository,passwordMapper,siteService)
+    UserService userService = Mock()
+    PasswordEncoder passwordEncoder = Mock()
+
+    def setup() {
+        passwordService = new PasswordService(passwordRepository, passwordMapper, siteService, userService, passwordEncoder)
     }
 
     def "Un usuario quiere listado de passwords que tiene"() {
         given: "Un Usuario"
 
-        Long usuarioId  = 1L
+        String usuarioId = "example"
         def password = createPassword()
-        def passwordDTO  = createPasswordDTO()
+        def passwordDTO = createPasswordDTO()
 
         when: "Solicita todas sus passwords"
         def response = passwordService.getAllPasswords()
 
         then: "Retorna un listado de sus passwords"
-
-        1 * passwordRepository.findByUserId(usuarioId) >> List.of(password)
-        1 * passwordMapper.toDto(List.of(password)) >> List.of(passwordDTO)
+        1 * userService.getLoggedInUserEmail() >> usuarioId
+        1 * passwordRepository.findByUser(usuarioId) >> List.of(password)
 
         response.size() == 1
     }
@@ -40,15 +45,14 @@ class PasswordServiceTest extends Specification {
     def "Un usuario quiere su listado de passwords pero no tiene ninguna"() {
         given: "Un Usuario"
 
-        Long usuarioId  = 1L
+        String usuarioId = "example"
 
         when: "Solicita todas sus passwords"
         def response = passwordService.getAllPasswords()
 
         then: "Retorna un listado vacio"
-
-        1 * passwordRepository.findByUserId(usuarioId) >> List.of()
-        1 * passwordMapper.toDto(List.of()) >> List.of()
+        1 * userService.getLoggedInUserEmail() >> usuarioId
+        1 * passwordRepository.findByUser(usuarioId) >> List.of()
 
         response.size() == 0
     }
@@ -62,13 +66,14 @@ class PasswordServiceTest extends Specification {
         passwordService.savePassword(dto)
 
         then: "Guarda correctamente la password en la base de datos"
-
-        1 * passwordRepository.getByPasswordAndSiteAndUserId(dto.getPassword(), dto.getSite(), dto.getUserId()) >> Optional.empty()
-        1 * siteService.saveSite(dto.getSite()) >> Site.builder().build()
-
-        1 * passwordRepository.save({p ->
-            p.password == dto.getPassword()
-            p.userId == dto.getUserId()
+        1 * userService.getLoggedInUserEmail() >> "ejemplo"
+        1 * passwordRepository.getByPasswordAndSiteAndUser(dto.getPassword(), dto.getSite(), dto.getUser()) >> Optional.empty()
+        1 * siteService.saveSite(dto.getSite()) >> Site.builder().description("GIT").id(1L).build()
+        1 * passwordEncoder.encode(dto.getPassword()) >> "qwerty"
+        1 * passwordRepository.save({ p ->
+            p.password == "qwerty"
+            p.user == dto.getUser()
+            p.site.id == 1L
         })
     }
 
@@ -81,28 +86,29 @@ class PasswordServiceTest extends Specification {
         passwordService.savePassword(dto)
 
         then: "No guarda su password dado que ya estaba"
-
-        1 * passwordRepository.getByPasswordAndSiteAndUserId(dto.getPassword(), dto.getSite(), dto.getUserId()) >> Optional.of(password)
+        1 * userService.getLoggedInUserEmail() >> "ejemplo"
+        1 * passwordRepository.getByPasswordAndSiteAndUser(dto.getPassword(), dto.getSite(), dto.getUser()) >> Optional.of(password)
 
         0 * siteService.saveSite(_)
         0 * passwordRepository.save(_)
         thrown(BusinessException)
     }
 
-    Password createPassword(){
-       return Password.builder()
+    Password createPassword() {
+        return Password.builder()
                 .password("random1")
-               .site(Site.builder()
-                       .description("Git")
-                       .build())
-               .build()
+                .user("ejemplo")
+                .site(Site.builder()
+                        .description("Git")
+                        .build())
+                .build()
     }
 
-    PasswordAddDTO createPasswordDTO(){
+    PasswordAddDTO createPasswordDTO() {
         return PasswordAddDTO.builder()
                 .password("random1")
                 .site("Git")
-                .userId(1L)
+                .user("ejemplo")
                 .build()
     }
 
