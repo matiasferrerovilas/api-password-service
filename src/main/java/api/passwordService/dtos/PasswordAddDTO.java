@@ -11,6 +11,6 @@ public class PasswordAddDTO {
   private String password;
   @Schema(example = "Facebook")
   private String site;
-  @Schema(example = "1")
+  @Schema(example = "hola@gmail.com")
   private String user;
 }

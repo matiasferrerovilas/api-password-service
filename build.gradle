@@ -68,9 +68,6 @@ dependencies {
 
 
 	//JWT OAUTH2
-	//implementation 'com.auth0:java-jwt:4.4.0'
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
-	//implementation 'com.auth0:jwks-rsa:0.22.1'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:3.4.1'
 	implementation 'org.springframework.security:spring-security-oauth2-resource-server:6.4.2'
 

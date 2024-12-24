@@ -28,14 +28,14 @@ public class PasswordController {
     this.passwordService = passwordService;
   }
 
-  @Operation(description = "Retornar Todas las Passwords")
+  @Operation(description = "Retornar Todas las Passwords del usuario logueado")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(value = HttpStatus.OK)
   public List<PasswordAddDTO> getPasswords()  {
       return passwordService.getAllPasswords();
   }
 
-  @Operation(description = "Guardar password")
+  @Operation(description = "Guardar password para usuario logueado")
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(value = HttpStatus.OK)
   public void savePassword(@RequestBody PasswordAddDTO passwordAddDTO)  {
