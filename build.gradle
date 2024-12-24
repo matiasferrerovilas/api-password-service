@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '3.2.4'
+	id 'org.springframework.boot' version '3.3.4'
 	id "io.spring.dependency-management" version "1.1.4"
 	id "io.freefair.lombok" version "8.10"
 	id 'org.liquibase.gradle' version "2.2.2"
@@ -28,7 +28,7 @@ copy {
 
 
 configurations {
-	implementation {
+	compileOnly {
 		extendsFrom annotationProcessor
 	}
 }
@@ -36,18 +36,6 @@ configurations {
 
 repositories {
 	mavenCentral()
-	maven {
-		url "https://gitlab.com/api/v4/groups/13383653/-/packages/maven"
-		name "GitLab"
-		credentials(HttpHeaderCredentials) {
-			name = 'Deploy-Token'
-			value = 'u8jkzaGLBq9ZuegQzxws'
-		}
-		authentication {
-			//noinspection GroovyAssignabilityCheck
-			header(HttpHeaderAuthentication)
-		}
-	}
 }
 
 dependencies {
@@ -57,19 +45,12 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
 
-	//Rabbit
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
-
 	//Health check
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
-	//Spring
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	//cache
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'com.github.ben-manes.caffeine:caffeine'
-
 
 	// logs
 	implementation 'org.apache.commons:commons-text:1.11.0'
@@ -86,16 +67,22 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
-	// Audit
-	implementation 'org.hibernate:hibernate-envers:6.4.4.Final'
+
+	//JWT OAUTH2
+	//implementation 'com.auth0:java-jwt:4.4.0'
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	//implementation 'com.auth0:jwks-rsa:0.22.1'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:3.4.1'
+	implementation 'org.springframework.security:spring-security-oauth2-resource-server:6.4.2'
 
 	//DB
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'mysql:mysql-connector-java:8.0.33'
+	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 	liquibaseRuntime 'org.liquibase:liquibase-core'
-	liquibaseRuntime 'mysql:mysql-connector-java:8.0.33'
-	liquibaseRuntime 'info.picocli:picocli:4.7.6'
+	liquibaseRuntime 'mysql:mysql-connector-java:8.0.32'
+	liquibaseRuntime 'info.picocli:picocli:4.7.1'
 	testImplementation 'org.liquibase:liquibase-core'
+
 
 	//Lombok
 	implementation 'org.projectlombok:lombok:1.18.34'
@@ -138,7 +125,7 @@ test {
 dependencyManagement {
 	imports {
 		// Feign related
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.0"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.2"
 		mavenBom "org.keycloak.bom:keycloak-adapter-bom:24.0.4"
 	}
 }
@@ -197,13 +184,13 @@ tasks.withType(Test).configureEach {
 }
 
 liquibase {
-	def dbName = System.properties['dbName'] ?: 'seguridad_m1'
+	def dbName = System.properties['dbName'] ?: 'passwords'
 	activities {
 		main {
 			changeLogFile 'build.migrations/db/changelog.xml'
-			url "jdbc:mysql://localhost:3306/$dbName"
+			url "jdbc:mysql://192.168.1.100:3306/$dbName"
 			username 'root'
-			password 'P4ssw0rd!'
+			password 'vilaswifi'
 		}
 	}
 }

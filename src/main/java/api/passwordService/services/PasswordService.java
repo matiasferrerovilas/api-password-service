@@ -1,7 +1,6 @@
 package api.passwordService.services;
 
 import api.passwordService.dtos.PasswordAddDTO;
-import api.passwordService.entities.Password;
 import api.passwordService.exceptions.BusinessException;
 import api.passwordService.mappers.PasswordMapper;
 import api.passwordService.repositories.PasswordRepository;
@@ -36,12 +35,10 @@ public class PasswordService {
 
     var site = siteService.saveSite(passwordAddDTO.getSite());
 
-    passwordRepository.save(
-        Password.builder()
-        .password(passwordAddDTO.getPassword())
-        .userId(passwordAddDTO.getUserId())
-        .site(site)
-        .build());
+    var password = passwordMapper.toEntity(passwordAddDTO);
+    password.setSite(site);
+
+    passwordRepository.save(password);
   }
 
   private void validateExistencePassword(PasswordAddDTO passwordAddDTO) {
