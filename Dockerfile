@@ -5,7 +5,7 @@ FROM eclipse-temurin:21-jdk-alpine
 ARG VERSION
 
 # Establece el directorio de trabajo dentro del contenedor
-WORKDIR /api-password-service
+WORKDIR /app
 
 # Copia el archivo JAR correspondiente al contenedor
 COPY build/libs/api-password-service-1.0.0-plain.jar api-password-service.jar
