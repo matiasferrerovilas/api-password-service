@@ -102,6 +102,8 @@ jobs:
           VERSION=$(awk -F'=' '/^version/ {gsub(/"/, "", $2); gsub(/[[:space:]]/, "", $2); print $2}' build.gradle)
           echo "version=$VERSION" >> $GITHUB_ENV
 
+      - name: List downloaded artifacts
+        run: ls -R ./artifact
       - name: Check generated JAR
         run: ls -al ./artifact/build
 
