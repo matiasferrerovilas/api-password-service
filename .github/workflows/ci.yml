@@ -116,7 +116,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build --build-arg VERSION=${{ env.version }} --cache-from=mferrerovilas/api-password:latest -t mferrerovilas/api-password:${{ env.version }} ./artifact
+          docker build --build-arg VERSION=${{ env.version }} --cache-from=mferrerovilas/api-password:latest -t mferrerovilas/api-password:${{ env.version }} .
           docker tag mferrerovilas/api-password:${{ env.version }} mferrerovilas/api-password:latest
           docker push mferrerovilas/api-password:${{ env.version }}
           docker push mferrerovilas/api-password:latest
