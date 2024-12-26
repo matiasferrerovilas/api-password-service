@@ -108,7 +108,7 @@ jobs:
         run: ls -al ./artifact
 
       - name: Move artifact
-        run: mv ./artifact/build/api-password-service-1.0.0-plain.jar ./api-password-service.jar
+        run: mv ./artifact/build/libs/api-password-service-${{ env.version }}-plain.jar ./api-password-service.jar
 
       - name: Check generated JAR
         run: ls -al ./
