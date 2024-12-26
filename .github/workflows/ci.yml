@@ -96,7 +96,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-build-artifacts
-          path: ./artifact
+          path: ./artifact/build
 
       - name: Set dynamic version
         id: set-version
