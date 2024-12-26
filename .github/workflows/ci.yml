@@ -94,6 +94,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Download artifact
+          uses: actions/download-artifact@v3
+          with:
+            name: java-build-artifacts
+            path: ./artifact
+
       - name: Set dynamic version
         id: set-version
         run: |
@@ -101,7 +107,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_ENV
 
       - name: Check generated JAR
-        run: ls -al build/libs
+        run: ls -al ./artifact
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -111,7 +117,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build --build-arg VERSION=${{ env.version }} -t mferrerovilas/api-password:${{ env.version }} .
+          docker build --build-arg VERSION=${{ env.version }} -t mferrerovilas/api-password:${{ env.version }} ./artifact
           docker tag mferrerovilas/api-password:${{ env.version }} mferrerovilas/api-password:latest
           docker push mferrerovilas/api-password:${{ env.version }}
           docker push mferrerovilas/api-password:latest
