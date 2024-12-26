@@ -9,7 +9,6 @@ on:
 env:
   SKIP_ACCEPTANCE_TEST: true
   JAVA_IMAGE: 'eclipse-temurin:21-jdk-alpine'
-  BUILD_CONFIG: './path/to/config'
 
 
 jobs:
@@ -35,7 +34,6 @@ jobs:
           chmod +x gradlew
           ./gradlew --version
           BUILD_VERSION=$(./gradlew printVersion --quiet)
-          PROPERTIES_FILE=$(basename $(find "${BUILD_CONFIG}" -mindepth 1 -maxdepth 1 -type f))
           PHASE=$(if [[ "${{ github.ref_name }}" == "develop" ]] || [[ "${{ github.ref_name }}" =~ ^hotfix/.* ]]; then echo "-SNAPSHOT"; else echo ""; fi)
           echo $BUILD_VERSION$PHASE > build.version
           echo $PROPERTIES_FILE > build.properties_file
