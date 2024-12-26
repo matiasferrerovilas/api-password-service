@@ -56,10 +56,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Extract version from build.gradle
-        id: extract_version
+      - name: Set dynamic version
+        id: set-version
         run: |
-          VERSION=$(grep -oP 'version\\s*=\\s*\"\\K[0-9.]+(?=\")' build.gradle)
+          VERSION=$(awk -F'=' '/^version/ {gsub(/"/, "", $2); gsub(/[[:space:]]/, "", $2); print $2}' build.gradle)
           echo "version=$VERSION" >> $GITHUB_ENV
 
       - name: Log in to Docker Hub
