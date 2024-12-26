@@ -8,7 +8,7 @@ ARG VERSION=latest
 WORKDIR /api-password-service
 
 # Copia el archivo JAR correspondiente al contenedor
-COPY build/libs/api-password-service-${VERSION}.jar api-password-service.jar
+COPY build/libs/api-password-service-${VERSION}-plain.jar api-password-service.jar
 
 # Expone el puerto de la aplicación
 EXPOSE 8080
