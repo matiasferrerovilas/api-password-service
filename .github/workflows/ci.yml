@@ -14,8 +14,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
@@ -23,10 +26,42 @@ jobs:
           cache-dependency-path: |
             **/gradle-wrapper.properties
             **/*.gradle
-      - run: ./gradlew build --no-daemon
 
-      - name: Check generated JAR
-        run: ls -al build/libs
+      - name: Prepare environment
+        run: |
+          export GRADLE_USER_HOME=$(pwd)/.gradle
+          chmod +x gradlew
+          ./gradlew --version
+          BUILD_VERSION=$(./gradlew printVersion --quiet)
+          PROPERTIES_FILE=$(basename $(find "${{ env.BUILD_CONFIG }}" -mindepth 1 -maxdepth 1 -type f))
+          PHASE=$(if [[ "${{ github.ref_name }}" == "develop" ]] || [[ "${{ github.ref_name }}" =~ ^hotfix/.* ]]; then echo "-SNAPSHOT"; else echo ""; fi)
+          echo $BUILD_VERSION$PHASE > build.version
+          echo $PROPERTIES_FILE > build.properties_file
+          echo $PHASE > build.phase
+
+      - name: Build project
+        run: ./gradlew clean assemble --stacktrace
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-build-artifacts
+          path: |
+            build.version
+            build.phase
+            build.properties_file
+            build/libs/*.jar
+            build/resources/*.jar
+            ${{ env.PATHS_TO_INCLUDE_IN_ARTIFACT }}
+          retention-days: 1
+
+      - name: Cache Gradle
+        uses: actions/cache@v3
+        with:
+          path: |
+            .gradle/wrapper
+            .gradle/caches
+          key: gradle-cache-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
   test:
     runs-on: ubuntu-latest
@@ -67,6 +102,7 @@ jobs:
 
       - name: Check generated JAR
         run: ls -al build/libs
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
