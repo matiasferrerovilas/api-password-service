@@ -2,7 +2,7 @@
 FROM eclipse-temurin:21-jdk-alpine
 
 # Establece un argumento para la versión de la aplicación
-ARG VERSION=latest
+ARG VERSION
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /api-password-service
