@@ -48,8 +48,6 @@ jobs:
           name: java-build-artifacts
           path: |
             build.version
-            build.phase
-            build.properties_file
             build/libs/*.jar
           retention-days: 1
 
@@ -105,7 +103,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_ENV
 
       - name: Check generated JAR
-        run: ls -al ./artifact
+        run: ls -al ./artifact/build
 
       - name: Move artifact
         run: mv ./artifact/build/libs/api-password-service-${{ env.version }}-plain.jar ./api-password-service.jar
