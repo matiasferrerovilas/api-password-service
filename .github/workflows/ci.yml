@@ -70,7 +70,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t mferrerovilas/api-password:${{ env.version }} .
+          docker build --build-arg VERSION=${{ env.version }} -t mferrerovilas/api-password:${{ env.version }} .
           docker tag mferrerovilas/api-password:${{ env.version }} mferrerovilas/api-password:latest
           docker push mferrerovilas/api-password:${{ env.version }}
           docker push mferrerovilas/api-password:latest
