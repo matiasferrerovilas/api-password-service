@@ -7,8 +7,8 @@ on:
 
 jobs:
   build:
-    uses: ./build.yml  # Usar el flujo de trabajo build.yml
+    uses: ./.github/workflows/build.yml
 
   deploy:
-    needs: build       # Espera a que el flujo de build termine
-    uses: ./deploy.yml # Usar el flujo de trabajo deploy.yml
+    needs: build
+    uses: ./.github/workflows/deploy.yml

@@ -10,7 +10,6 @@ env:
   SKIP_ACCEPTANCE_TEST: true
   JAVA_IMAGE: 'eclipse-temurin:21-jdk-alpine'
 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -40,7 +39,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Cache Docker layers
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-docker-${{ github.sha }}
@@ -48,14 +47,11 @@ jobs:
             ${{ runner.os }}-docker-
 
       - name: Build and push Docker image
-        if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: api-password:${{ env.version }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-      

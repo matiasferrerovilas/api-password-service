@@ -34,9 +34,7 @@ jobs:
           ./gradlew --version
           BUILD_VERSION=$(./gradlew printVersion --quiet)
           PHASE=$(if [[ "${{ github.ref_name }}" == "develop" ]] || [[ "${{ github.ref_name }}" =~ ^hotfix/.* ]]; then echo "-SNAPSHOT"; else echo ""; fi)
-          echo $BUILD_VERSION$PHASE > build.version
-          echo $PROPERTIES_FILE > build.properties_file
-          echo $PHASE > build.phase
+          echo "version=$BUILD_VERSION$PHASE" >> $GITHUB_ENV
 
       - name: Build project
         run: ./gradlew assemble --no-daemon
@@ -46,8 +44,7 @@ jobs:
         with:
           name: java-build-artifacts
           path: |
-            build.version
-            build/api-password-${{ env.version }}-plain.jar
+            build/libs/api-password-${{ env.version }}.jar
           retention-days: 1
 
       - name: Cache Gradle
@@ -57,3 +54,5 @@ jobs:
             .gradle/wrapper
             .gradle/caches
           key: gradle-cache-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-cache-${{ runner.os }}-
