@@ -1,10 +1,7 @@
 name: build-pipeline
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_call: {}
 
 env:
   SKIP_ACCEPTANCE_TEST: true
