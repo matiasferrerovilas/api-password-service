@@ -9,8 +9,8 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     secrets:
-      docker_username: ${{ secrets.DOCKER_USERNAME }}
-      docker_password: ${{ secrets.DOCKER_PASSWORD }}
+      docker_username: "${{ secrets.DOCKER_USERNAME }}"
+      docker_password: "${{ secrets.DOCKER_PASSWORD }}"
 
   deploy:
     needs: build
