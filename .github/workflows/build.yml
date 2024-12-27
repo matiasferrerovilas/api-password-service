@@ -3,10 +3,10 @@ name: build-pipeline
 on:
   workflow_call:
     secrets:
-      docker_username:
+      DOCKER_USERNAME:
         description: 'Docker Username'
         required: true
-      docker_password:
+      DOCKER_PASSWORD:
         description: 'Docker Password'
         required: true
 
@@ -16,14 +16,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Print Docker username
-        run:
-          echo "Docker username: ${{ inputs.docker_username }}"
-
-      - name: Print Docker username
-        run:
-            echo "Docker username: ${{ inputs.docker_password }}"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
