@@ -5,7 +5,7 @@ on:
 
 env:
   SKIP_ACCEPTANCE_TEST: true
-  JAVA_IMAGE: 'eclipse-temurin:21-jdk-alpine'
+  JAVA_IMAGE: ${ { env.JAVA_IMAGE } }
 
 jobs:
   build:
