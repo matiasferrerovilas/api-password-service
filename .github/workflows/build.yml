@@ -3,6 +3,9 @@ name: build-pipeline
 on:
   workflow_call: {}
 
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,7 +16,7 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: mferrerovilas
+          username: $DOCKER_USERNAME
           password: palmera123
 
       - name: Set up JDK
