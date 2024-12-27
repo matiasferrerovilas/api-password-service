@@ -1,7 +1,14 @@
 name: deploy-pipeline
 
 on:
-  workflow_call: {}
+  workflow_call:
+    secrets:
+      DOCKER_USERNAME:
+        description: 'Docker Username'
+        required: true
+      DOCKER_PASSWORD:
+        description: 'Docker Password'
+        required: true
 
 jobs:
   deploy:
