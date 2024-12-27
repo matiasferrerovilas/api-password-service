@@ -3,10 +3,6 @@ name: deploy-pipeline
 on:
   workflow_call: {}
 
-env:
-  SKIP_ACCEPTANCE_TEST: true
-  JAVA_IMAGE: ${ { vars.JAVA_IMAGE } }
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
