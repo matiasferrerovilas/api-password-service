@@ -2,7 +2,7 @@ name: deploy-pipeline
 
 on:
   workflow_run:
-    workflows: ["test-pipeline"]
+    workflows: ["general-pipeline"]
     types:
       - completed
 

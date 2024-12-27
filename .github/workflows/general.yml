@@ -1,0 +1,14 @@
+name: general-pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    uses: ./build.yml  # Usar el flujo de trabajo build.yml
+
+  deploy:
+    needs: build       # Espera a que el flujo de build termine
+    uses: ./deploy.yml # Usar el flujo de trabajo deploy.yml
