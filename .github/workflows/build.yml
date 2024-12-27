@@ -2,15 +2,13 @@ name: build-pipeline
 
 on:
   workflow_call:
-    inputs:
+    secrets:
       docker_username:
         description: 'Docker Username'
         required: true
-        type: string
       docker_password:
         description: 'Docker Password'
         required: true
-        type: string
 
 jobs:
   build:
