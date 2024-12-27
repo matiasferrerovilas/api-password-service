@@ -1,0 +1,59 @@
+name: build-pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  SKIP_ACCEPTANCE_TEST: true
+  JAVA_IMAGE: 'eclipse-temurin:21-jdk-alpine'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+          cache-dependency-path: |
+            **/gradle-wrapper.properties
+            **/*.gradle
+
+      - name: Prepare environment
+        run: |
+          export GRADLE_USER_HOME=$(pwd)/.gradle
+          chmod +x gradlew
+          ./gradlew --version
+          BUILD_VERSION=$(./gradlew printVersion --quiet)
+          PHASE=$(if [[ "${{ github.ref_name }}" == "develop" ]] || [[ "${{ github.ref_name }}" =~ ^hotfix/.* ]]; then echo "-SNAPSHOT"; else echo ""; fi)
+          echo $BUILD_VERSION$PHASE > build.version
+          echo $PROPERTIES_FILE > build.properties_file
+          echo $PHASE > build.phase
+
+      - name: Build project
+        run: ./gradlew assemble --no-daemon
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-build-artifacts
+          path: |
+            build.version
+            build/libs/*.jar
+          retention-days: 1
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            .gradle/wrapper
+            .gradle/caches
+          key: gradle-cache-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
