@@ -103,10 +103,6 @@ dependencies {
 
 }
 
-bootJar {
-	archiveFileName = 'app.jar'
-}
-
 springBoot {
 	buildInfo()
 }
