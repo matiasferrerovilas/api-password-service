@@ -41,7 +41,8 @@ jobs:
         with:
           name: java-build-artifacts
           path: |
-            build/libs/api-password-${{ env.version }}.jar
+            build.version
+            build/api-password-${{ env.version }}-plain.jar
           retention-days: 1
 
       - name: Cache Gradle
