@@ -9,9 +9,6 @@ on:
       DOCKER_PASSWORD:
         description: 'Docker Password'
         required: true
-      VERSION:
-        required: true
-        description: "version"
 
 jobs:
   deploy:
@@ -19,6 +16,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Get project version
+        run: |
+          version=$(./gradlew printVersion | grep -oP '\d+\.\d+\.\d+')
+          echo "VERSION=$version" >> $GITHUB_ENV
 
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -46,4 +48,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: api-password:${{ secrets.VERSION }}
+          tags: api-password:${{ env.VERSION }}

@@ -9,19 +9,9 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
 
-  get-version:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Get project version
-        run: |
-          version=$(./gradlew printVersion | grep -oP '\d+\.\d+\.\d+')
-          echo "version=$version" >> $GITHUB_ENV
   deploy:
     needs: build
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
       DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
-      VERSION: "${{ env.version }}"
