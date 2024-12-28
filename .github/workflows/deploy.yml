@@ -9,6 +9,9 @@ on:
       DOCKER_PASSWORD:
         description: 'Docker Password'
         required: true
+      VERSION:
+        required: true
+        description: "version"
 
 jobs:
   deploy:
@@ -43,4 +46,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: api-password:${{ env.version }}
+          tags: api-password:${{ secrets.VERSION }}
