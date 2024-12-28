@@ -28,6 +28,9 @@ jobs:
           name: java-build-artifacts
           path: ./
 
+      - name: List build directory contents
+        run: ls -R ./
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
