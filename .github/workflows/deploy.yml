@@ -46,9 +46,8 @@ jobs:
             ${{ runner.os }}-docker-
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: api-password:${{ env.VERSION }}
+        run: |
+          docker build --build-arg VERSION=${{ env.VERSION }} --cache-from=mferrerovilas/api-password:latest -t mferrerovilas/api-password:${{ env.VERSION }} .
+          docker tag mferrerovilas/api-password:${{ env.VERSION }} mferrerovilas/api-password:latest
+          docker push mferrerovilas/api-password:${{ env.VERSION }}
+          docker push mferrerovilas/api-password:latest
