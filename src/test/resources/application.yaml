@@ -1,13 +1,17 @@
 spring:
+
   main:
     allow-bean-definition-overriding: true
+
   liquibase:
     enabled: false
+
   datasource:
     url: jdbc:tc:mysql:8.0.30:///passwords
     username: root
     password: vilaswifi
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: false
@@ -19,6 +23,7 @@ spring:
         format_sql: true
         generate_statistics: false
         dialect: org.hibernate.dialect.MySQL8Dialect
+
   security:
     oauth2:
       resourceserver:
@@ -27,14 +32,9 @@ spring:
 
 springdoc:
   swagger-ui:
+    enabled: false
     disable-swagger-default-url: true
     try-it-out-enabled: true
 
 server:
   forward-headers-strategy: framework
-
-jwt:
-  auth:
-    converter:
-      principle-attribute: preferred_username
-      resource-id: admin-m2

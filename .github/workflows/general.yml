@@ -9,8 +9,12 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
 
-  deploy:
+  test:
     needs: build
+    uses: ./.github/workflows/test.yml
+
+  deploy:
+    needs: test
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
