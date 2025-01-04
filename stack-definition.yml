@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   server:
-    image: mferrerovilas/api-password:${VERSION:-latest}
+    image: mferrerovilas/api-password:1.0.0
     deploy:
       update_config:
         order: start-first
