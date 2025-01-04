@@ -45,7 +45,7 @@ public class PasswordService {
   }
 
   private void validateExistencePassword(PasswordAddDTO passwordAddDTO) {
-    passwordRepository.getByPasswordAndSiteAndUser(passwordAddDTO.getPassword(), passwordAddDTO.getSite(), passwordAddDTO.getUser())
+    passwordRepository.getByPasswordAndSiteAndUser(passwordAddDTO.getSite(), passwordAddDTO.getUser())
         .ifPresent(p -> {
           throw new BusinessException("Password existente en la base de datos.");
         });

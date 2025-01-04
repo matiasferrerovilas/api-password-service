@@ -67,7 +67,7 @@ class PasswordServiceTest extends Specification {
 
         then: "Guarda correctamente la password en la base de datos"
         1 * userService.getLoggedInUserEmail() >> "ejemplo"
-        1 * passwordRepository.getByPasswordAndSiteAndUser(dto.getPassword(), dto.getSite(), dto.getUser()) >> Optional.empty()
+        1 * passwordRepository.getByPasswordAndSiteAndUser(dto.getSite(), dto.getUser()) >> Optional.empty()
         1 * siteService.saveSite(dto.getSite()) >> Site.builder().description("GIT").id(1L).build()
         1 * passwordEncoder.encode(dto.getPassword()) >> "qwerty"
         1 * passwordRepository.save({ p ->
@@ -87,7 +87,7 @@ class PasswordServiceTest extends Specification {
 
         then: "No guarda su password dado que ya estaba"
         1 * userService.getLoggedInUserEmail() >> "ejemplo"
-        1 * passwordRepository.getByPasswordAndSiteAndUser(dto.getPassword(), dto.getSite(), dto.getUser()) >> Optional.of(password)
+        1 * passwordRepository.getByPasswordAndSiteAndUser( dto.getSite(), dto.getUser()) >> Optional.of(password)
 
         0 * siteService.saveSite(_)
         0 * passwordRepository.save(_)
