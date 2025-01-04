@@ -6,4 +6,6 @@ WORKDIR /app
 
 COPY ./api-password-service-${VERSION}.jar api-password-service.jar
 
+EXPOSE 8081
+
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "api-password-service.jar"]
