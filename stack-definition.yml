@@ -5,4 +5,4 @@ services:
       update_config:
         order: start-first
     ports:
-      - "8081"
+      - "8081:8081"
