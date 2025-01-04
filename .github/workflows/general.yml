@@ -10,8 +10,12 @@ jobs:
     uses: ./.github/workflows/build.yml
 
   deploy:
-    needs: test
+    needs: build
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_USERNAME: "${{ secrets.DOCKER_USERNAME }}"
       DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
+      PORTAINER_HOST: "${{ secrets.PORTAINER_HOST }}"
+      PORTAINER_USERNAME: "${{ secrets.PORTAINER_USERNAME }}"
+      PORTAINER_PASSWORD: "${{ secrets.PORTAINER_PASSWORD }}"
+
