@@ -9,6 +9,12 @@ on:
       DOCKER_PASSWORD:
         description: 'Docker Password'
         required: true
+      PORTAINER_HOST:
+        required: true
+      PORTAINER_USERNAME:
+        required: true
+      PORTAINER_PASSWORD:
+        required: true
 
 jobs:
   deploy:
@@ -50,3 +56,15 @@ jobs:
           docker build --build-arg VERSION=${{ env.VERSION }} --cache-from=mferrerovilas/api-password:latest -t mferrerovilas/api-password:${{ env.VERSION }} .
           docker tag mferrerovilas/api-password:${{ env.VERSION }} mferrerovilas/api-password:latest
           docker push mferrerovilas/api-password:${{ env.VERSION }}
+
+      - name: Deploy stack to Portainer
+        uses: carlrygart/portainer-stack-deploy@v1
+        with:
+          portainer-host: ${{ secrets.PORTAINER_HOST }}
+          username: ${{ secrets.PORTAINER_USERNAME }}
+          password: ${{ secrets.PORTAINER_PASSWORD }}
+          stack-name: 'api-password'
+          stack-definition: 'stack-definition.yml'
+          image: mferrerovilas/api-password:${{ env.VERSION }}
+          prune-stack: false
+          pull-image: true
