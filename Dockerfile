@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk-alpine
+FROM arm64v8/eclipse-temurin:21-jdk-alpine
 
 ARG VERSION
 
