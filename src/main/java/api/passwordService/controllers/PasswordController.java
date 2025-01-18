@@ -1,5 +1,6 @@
 package api.passwordService.controllers;
 
+import api.passwordService.dtos.GetAllPasswordsDTO;
 import api.passwordService.dtos.PasswordAddDTO;
 import api.passwordService.services.PasswordService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +32,7 @@ public class PasswordController {
   @Operation(description = "Retornar Todas las Passwords del usuario logueado")
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(value = HttpStatus.OK)
-  public List<PasswordAddDTO> getPasswords()  {
+  public List<GetAllPasswordsDTO> getPasswords()  {
       return passwordService.getAllPasswords();
   }
 

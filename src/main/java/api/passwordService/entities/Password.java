@@ -29,5 +29,6 @@ public class Password {
   @ManyToOne(optional = false)
   @JoinColumn(name = "site_id", nullable = false)
   private Site site;
-  private String user;
+  private String siteUser;
+  private String owner;
 }

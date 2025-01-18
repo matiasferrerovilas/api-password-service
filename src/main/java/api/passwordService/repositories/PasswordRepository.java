@@ -12,9 +12,9 @@ import java.util.Optional;
 @Repository
 public interface PasswordRepository extends JpaRepository<Password, Long> {
 
-  List<Password> findByUser(String user);
+  List<Password> findByOwner(String owner);
 
-  @Query("SELECT p FROM Password p WHERE p.site.description = :description AND p.user = :user")
+  @Query("SELECT p FROM Password p WHERE p.site.description = :description AND p.siteUser = :siteUser AND p.owner = :owner")
   Optional<Password> getByPasswordAndSiteAndUser(@Param("description") String description,
-                                                      @Param("user") String user);
+                                                      @Param("siteUser") String siteUser, @Param("owner") String owner);
 }
