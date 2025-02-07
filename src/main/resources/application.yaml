@@ -34,7 +34,11 @@ spring:
 
   liquibase:
     enabled: false
-
+logging:
+  level:
+    org:
+      springframework:
+        security=DEBUG:
 springdoc:
   api-docs:
     enabled: true

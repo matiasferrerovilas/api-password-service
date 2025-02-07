@@ -2,6 +2,7 @@ package api.passwordService.configuration;
 
 import api.passwordService.exceptions.ErrorResponseDTO;
 import api.passwordService.exceptions.PermissionDeniedException;
+import jakarta.persistence.EntityExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -101,5 +102,17 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).contentType(MediaType.APPLICATION_PROBLEM_JSON).body(errorResponseDTO);
   }
 
+  @ExceptionHandler(EntityExistsException.class)
+  public ResponseEntity<ErrorResponseDTO> handleEntityExistsException(EntityExistsException ex) {
+
+    log.error("Entidad already in data base", ex);
+
+    var errorResponseDTO = ErrorResponseDTO.builder()
+        .title("BAD_REQUEST")
+        .statusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+        .detail(ex.getMessage())
+        .build();
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_PROBLEM_JSON).body(errorResponseDTO);
+  }
 
 }
