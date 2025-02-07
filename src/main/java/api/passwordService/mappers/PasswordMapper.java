@@ -1,5 +1,6 @@
 package api.passwordService.mappers;
 
+import api.passwordService.dtos.GetAllPasswordsDTO;
 import api.passwordService.dtos.PasswordAddDTO;
 import api.passwordService.entities.Password;
 import org.mapstruct.Mapper;
@@ -13,11 +14,11 @@ public interface PasswordMapper {
 
 
   @Mapping(source = "site.description", target = "site")
-  PasswordAddDTO toDto(Password password);
+  GetAllPasswordsDTO toDto(Password password);
 
   @Mapping(source = "site", target = "site.description")
   Password toEntity(PasswordAddDTO passwordAddDTO);
 
-  List<PasswordAddDTO> toDto(List<Password> passwords);
+  List<GetAllPasswordsDTO> toDto(List<Password> passwords);
 
 }

@@ -6,9 +6,9 @@ import api.passwordService.entities.Password
 import api.passwordService.entities.Site
 import api.passwordService.exceptions.BusinessException
 import api.passwordService.mappers.PasswordMapper
-import api.passwordService.mappers.PasswordMapperImpl
 import api.passwordService.repositories.PasswordRepository
-import org.springframework.beans.factory.annotation.Autowired
+import jakarta.persistence.EntityExistsException
+import org.mapstruct.factory.Mappers
 import org.springframework.security.crypto.password.PasswordEncoder
 import spock.lang.Specification
 
@@ -16,7 +16,7 @@ class PasswordServiceTest extends Specification {
 
     PasswordRepository passwordRepository = Mock()
     PasswordService passwordService
-    PasswordMapper passwordMapper = new PasswordMapperImpl()
+    PasswordMapper passwordMapper = Mappers.getMapper(PasswordMapper)
     SiteService siteService = Mock()
     UserService userService = Mock()
     PasswordEncoder passwordEncoder = Mock()
@@ -37,7 +37,7 @@ class PasswordServiceTest extends Specification {
 
         then: "Retorna un listado de sus passwords"
         1 * userService.getLoggedInUserEmail() >> usuarioId
-        1 * passwordRepository.findByUser(usuarioId) >> List.of(password)
+        1 * passwordRepository.findByOwner(usuarioId) >> List.of(password)
 
         response.size() == 1
     }
@@ -52,7 +52,7 @@ class PasswordServiceTest extends Specification {
 
         then: "Retorna un listado vacio"
         1 * userService.getLoggedInUserEmail() >> usuarioId
-        1 * passwordRepository.findByUser(usuarioId) >> List.of()
+        1 * passwordRepository.findByOwner(usuarioId) >> List.of()
 
         response.size() == 0
     }
@@ -67,12 +67,12 @@ class PasswordServiceTest extends Specification {
 
         then: "Guarda correctamente la password en la base de datos"
         1 * userService.getLoggedInUserEmail() >> "ejemplo"
-        1 * passwordRepository.getByPasswordAndSiteAndUser(dto.getSite(), dto.getUser()) >> Optional.empty()
+        1 * passwordRepository.getByPasswordAndSiteAndUser(dto.getSite(), dto.getSiteUser(),"ejemplo") >> Optional.empty()
         1 * siteService.saveSite(dto.getSite()) >> Site.builder().description("GIT").id(1L).build()
         1 * passwordEncoder.encode(dto.getPassword()) >> "qwerty"
         1 * passwordRepository.save({ p ->
             p.password == "qwerty"
-            p.user == dto.getUser()
+            p.owner == dto.getSiteUser()
             p.site.id == 1L
         })
     }
@@ -87,17 +87,17 @@ class PasswordServiceTest extends Specification {
 
         then: "No guarda su password dado que ya estaba"
         1 * userService.getLoggedInUserEmail() >> "ejemplo"
-        1 * passwordRepository.getByPasswordAndSiteAndUser( dto.getSite(), dto.getUser()) >> Optional.of(password)
+        1 * passwordRepository.getByPasswordAndSiteAndUser( dto.getSite(), dto.getSiteUser(),"ejemplo") >> Optional.of(password)
 
         0 * siteService.saveSite(_)
         0 * passwordRepository.save(_)
-        thrown(BusinessException)
+        thrown(EntityExistsException)
     }
 
     Password createPassword() {
         return Password.builder()
                 .password("random1")
-                .user("ejemplo")
+                .siteUser("ejemplo")
                 .site(Site.builder()
                         .description("Git")
                         .build())
@@ -108,7 +108,7 @@ class PasswordServiceTest extends Specification {
         return PasswordAddDTO.builder()
                 .password("random1")
                 .site("Git")
-                .user("ejemplo")
+                .siteUser("ejemplo")
                 .build()
     }
 

@@ -2,7 +2,6 @@ package api.passwordService.services;
 
 import api.passwordService.dtos.GetAllPasswordsDTO;
 import api.passwordService.dtos.PasswordAddDTO;
-import api.passwordService.entities.Tuple;
 import api.passwordService.mappers.PasswordMapper;
 import api.passwordService.repositories.PasswordRepository;
 import jakarta.persistence.EntityExistsException;
@@ -12,8 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -27,19 +24,7 @@ public class PasswordService {
   private final PasswordEncoder passwordEncoder;
 
   public List<GetAllPasswordsDTO> getAllPasswords() {
-    var list = passwordRepository.findByOwner(userService.getLoggedInUserEmail());
-    Map<String, List<Tuple<String, String>>> grouped = list.stream()
-        .collect(Collectors.groupingBy(
-            password -> password.getSite().getDescription(),
-            Collectors.mapping(
-                password -> new Tuple<String, String>(password.getSiteUser(), password.getPassword()),
-                Collectors.toList()
-            )
-        ));
-
-    return grouped.entrySet().stream()
-        .map(entry -> new GetAllPasswordsDTO(entry.getKey(), entry.getValue()))
-        .collect(Collectors.toList());
+    return this.passwordMapper.toDto(passwordRepository.findByOwner(userService.getLoggedInUserEmail()));
   }
 
   public void savePassword(PasswordAddDTO passwordAddDTO) {
