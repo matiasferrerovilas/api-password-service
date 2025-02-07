@@ -1,6 +1,6 @@
 package api.passwordService.dtos;
 
 
-public record GetAllPasswordsDTO(String password, String site, String siteUser
+public record GetAllPasswordsDTO(Long id, String password, String site, String siteUser
 ) {
 }
