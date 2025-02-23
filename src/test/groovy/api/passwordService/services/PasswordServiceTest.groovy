@@ -4,7 +4,6 @@ package api.passwordService.services
 import api.passwordService.dtos.PasswordAddDTO
 import api.passwordService.entities.Password
 import api.passwordService.entities.Site
-import api.passwordService.exceptions.BusinessException
 import api.passwordService.mappers.PasswordMapper
 import api.passwordService.repositories.PasswordRepository
 import jakarta.persistence.EntityExistsException
